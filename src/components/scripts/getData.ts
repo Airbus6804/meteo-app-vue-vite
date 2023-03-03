@@ -2,11 +2,33 @@ type meteoInformations = {
   temperature: Number;
   weathercode: Number;
   time: String;
-  apparent_temperature: Number | undefined;
+};
+
+type meteoInformationsHourly = {
+  time: Array<String>;
+  temperature: Array<Number>;
+  apparent_temperature: Array<Number>;
+  weather_code: Array<Number>;
+  precipitation_probability: Array<Number>;
+};
+
+type meteoInformationsDaily = {
+  time: Array<String>;
+  weather_code: Array<Number>;
+  sunset: Array<Number>;
+  sunrise: Array<Number>;
+  max_temperature: Array<Number>;
+  min_temperature: Array<Number>;
+};
+
+type meteoInformationsArray = {
+  current_weather: meteoInformations | undefined;
+  hourly: meteoInformationsHourly | undefined;
+  daily: meteoInformationsDaily | undefined;
 };
 
 export default class Meteo {
-  #baseUrl: String;
+  #baseUrl: string;
   #lat: Number;
   #lon: Number;
 
@@ -49,5 +71,82 @@ export default class Meteo {
     });
 
     //console.log(this.#baseUrl)
+  }
+
+  async getData(
+    hourly: Array<String>,
+    daily: Array<String>,
+    now: Boolean
+  ): Promise<meteoInformationsArray> {
+    if (now) {
+      this.#settings.current_weather = "false";
+    } else {
+      this.#settings.current_weather = "true";
+    }
+
+    this.#updateBaseUrl;
+
+    let url: string = this.#baseUrl;
+
+    if (hourly.length) {
+      url += "&hourly=";
+
+      Object.entries(hourly).forEach((entrie) => {
+        url += `${entrie[1]},`;
+      });
+
+      url = url.substring(0, url.length - 1);
+    }
+
+    if (daily.length) {
+      url += "&daily=";
+      Object.entries(daily).forEach((entrie) => {
+        url += `${entrie[1]},`;
+      });
+      url = url.substring(0, url.length - 1);
+    }
+
+    let data: any = await fetch(new URL(url));
+
+    data = await data.json();
+
+    const ret: meteoInformationsArray = {
+      current_weather: undefined,
+      daily: undefined,
+      hourly: undefined,
+    };
+
+    const { current_weather, hourly: hourlyInfo, daily: dailyInfo } = data;
+    if (now) {
+      ret.current_weather = {
+        temperature: current_weather.temperature,
+        time: current_weather.time,
+        weathercode: current_weather.weathercode,
+      };
+    }
+
+    if (hourly.length) {
+      ret.hourly = {
+        time: hourlyInfo.time,
+        temperature: hourlyInfo.temperature_2m,
+        apparent_temperature: hourlyInfo.apparent_temperature,
+        weather_code: hourlyInfo.weathercode,
+        precipitation_probability: hourlyInfo.precipitation_probability,
+      };
+    }
+
+    if (daily.length) {
+      ret.daily = {
+        max_temperature: dailyInfo.temperature_2m_max,
+        min_temperature: dailyInfo.temperature_2m_min,
+        weather_code: dailyInfo.weathercode,
+        time: dailyInfo.time,
+        sunrise: dailyInfo.sunrise,
+        sunset: dailyInfo.sunset,
+      };
+    }
+
+    return ret;
+
   }
 }
