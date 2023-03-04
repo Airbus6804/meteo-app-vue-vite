@@ -1,15 +1,24 @@
 <script setup lang="ts">
-
-import info from './components/info.vue'
-
+import meteoCard from "./components/meteoCard.vue";
 </script>
 
 <template>
-
-  <info></info>
-  
+  <main>
+    <!--
+    <Suspense>
+      <meteoCard class="meteoCard"></meteoCard>
+    </Suspense>
+  -->
+  </main>
 </template>
 
-<style scoped>
-
+<style scoped lang="scss">
+  main{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .meteoCard{
+    //flex: 1;
+  }
 </style>

@@ -1,31 +1,4 @@
-type meteoInformations = {
-  temperature: Number;
-  weathercode: Number;
-  time: String;
-};
-
-type meteoInformationsHourly = {
-  time: Array<String>;
-  temperature: Array<Number>;
-  apparent_temperature: Array<Number>;
-  weather_code: Array<Number>;
-  precipitation_probability: Array<Number>;
-};
-
-type meteoInformationsDaily = {
-  time: Array<String>;
-  weather_code: Array<Number>;
-  sunset: Array<Number>;
-  sunrise: Array<Number>;
-  max_temperature: Array<Number>;
-  min_temperature: Array<Number>;
-};
-
-type meteoInformationsArray = {
-  current_weather: meteoInformations | undefined;
-  hourly: meteoInformationsHourly | undefined;
-  daily: meteoInformationsDaily | undefined;
-};
+import * as types from './dataTypes';
 
 export default class Meteo {
   #baseUrl: string;
@@ -73,11 +46,12 @@ export default class Meteo {
     //console.log(this.#baseUrl)
   }
 
-  async getData(
-    hourly: Array<String>,
-    daily: Array<String>,
-    now: Boolean
-  ): Promise<meteoInformationsArray> {
+  async getData(options: {
+    hourly?: Array<string>;
+    daily?: Array<string>;
+    now?: Boolean;
+  }): Promise<types.meteoInformationsArray> {
+    const { hourly, daily, now } = options;
     if (now) {
       this.#settings.current_weather = "false";
     } else {
@@ -88,7 +62,7 @@ export default class Meteo {
 
     let url: string = this.#baseUrl;
 
-    if (hourly.length) {
+    if (hourly) {
       url += "&hourly=";
 
       Object.entries(hourly).forEach((entrie) => {
@@ -98,7 +72,7 @@ export default class Meteo {
       url = url.substring(0, url.length - 1);
     }
 
-    if (daily.length) {
+    if (daily) {
       url += "&daily=";
       Object.entries(daily).forEach((entrie) => {
         url += `${entrie[1]},`;
@@ -110,7 +84,7 @@ export default class Meteo {
 
     data = await data.json();
 
-    const ret: meteoInformationsArray = {
+    const ret: types.meteoInformationsArray = {
       current_weather: undefined,
       daily: undefined,
       hourly: undefined,
@@ -125,7 +99,7 @@ export default class Meteo {
       };
     }
 
-    if (hourly.length) {
+    if (hourly) {
       ret.hourly = {
         time: hourlyInfo.time,
         temperature: hourlyInfo.temperature_2m,
@@ -135,7 +109,7 @@ export default class Meteo {
       };
     }
 
-    if (daily.length) {
+    if (daily) {
       ret.daily = {
         max_temperature: dailyInfo.temperature_2m_max,
         min_temperature: dailyInfo.temperature_2m_min,
@@ -147,6 +121,61 @@ export default class Meteo {
     }
 
     return ret;
+  }
 
+  async getNow() {
+    const { current_weather: ret } = await this.getData({
+      now: true,
+    });
+    return ret;
+  }
+
+  async getDaily() {
+    const { daily } = Meteo.parameters;
+    const {daily: ret} = await this.getData({
+      daily: [
+        daily.sunset,
+        daily.sunrise,
+        daily.weathercode,
+        daily.min_temperature,
+        daily.max_temperature,
+      ],
+    });
+    return ret;
+  }
+
+  async getHourly() {
+    const { hourly} = Meteo.parameters;
+    const { hourly: ret } = await this.getData({
+      hourly: [
+        hourly.temperature,
+        hourly.weathercode,
+        hourly.apparent_temperature,
+        hourly.precipitation_probability,
+      ],
+    });
+    return ret;
+  }
+
+  async getAll(){
+
+    const { hourly, daily } = Meteo.parameters;
+
+    return await this.getData({
+      hourly: [
+        hourly.temperature,
+        hourly.weathercode,
+        hourly.apparent_temperature,
+        hourly.precipitation_probability,
+      ],
+      daily: [
+        daily.sunset,
+        daily.sunrise,
+        daily.weathercode,
+        daily.min_temperature,
+        daily.max_temperature,
+      ],
+      now: true,
+    });
   }
 }
