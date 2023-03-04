@@ -14,8 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 iconsMap.forEach((e) => library.add(e.icon));
 
 const props = defineProps({
-  data: Object,
-  index: Number,
+  data: {type: Object, required:true},
+  index: {type: Number, required:true}
 });
 
 const days = [
@@ -61,7 +61,10 @@ const fa = "fa-solid fa-";
 
 <style scoped lang="scss">
 .meteoInfo {
+  transition: all .35s ease;
+  cursor: pointer;
   border-bottom: 1px solid gray;
+  border-radius: .5rem;
   height: 3rem;
   display: flex;
   align-items: center;
@@ -107,6 +110,17 @@ const fa = "fa-solid fa-";
           content: "°";
         }
       }
+    }
+  }
+
+  &:hover{
+    background-color: rgba(255, 255, 255, 0.3);
+    
+    border: 1px solid black;
+    box-shadow: 0px 2px 3px #333;
+
+    &>.meteoInfo__day>.day{
+      text-decoration: underline 1px #333;
     }
   }
 }

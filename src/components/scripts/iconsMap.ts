@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 
 import {
   faSun,
@@ -8,8 +8,6 @@ import {
   faSnowflake,
   faThunderstorm,
 } from "@fortawesome/free-solid-svg-icons";
-
-console.log(faSun.iconName);
 
 const iconMap = new Map();
 iconMap.set("0", { name: "Sunny", icon: faSun });

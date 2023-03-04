@@ -10,6 +10,7 @@ export interface meteoInformationsHourly {
   apparent_temperature: Array<Number>;
   weather_code: Array<Number>;
   precipitation_probability: Array<Number>;
+  relative_humidity: Array<Number>
 };
 
 export interface meteoInformationsDaily {
@@ -26,3 +27,10 @@ export interface meteoInformationsArray {
   hourly: meteoInformationsHourly | undefined;
   daily: meteoInformationsDaily | undefined;
 };
+
+export interface location{
+  countryName: String;
+  city: String;
+  region: String;
+}
+

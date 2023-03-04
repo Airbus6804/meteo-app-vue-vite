@@ -16,6 +16,7 @@ export default class Meteo {
       apparent_temperature: "apparent_temperature",
       precipitation_probability: "precipitation_probability",
       weathercode: "weathercode",
+      relative_humidity: "relativehumidity_2m",
     },
 
     daily: {
@@ -47,6 +48,7 @@ export default class Meteo {
   }
 
   async getData(options: {
+    
     hourly?: Array<string>;
     daily?: Array<string>;
     now?: Boolean;
@@ -106,6 +108,7 @@ export default class Meteo {
         apparent_temperature: hourlyInfo.apparent_temperature,
         weather_code: hourlyInfo.weathercode,
         precipitation_probability: hourlyInfo.precipitation_probability,
+        relative_humidity: hourlyInfo.relativehumidity_2m,
       };
     }
 
@@ -132,7 +135,7 @@ export default class Meteo {
 
   async getDaily() {
     const { daily } = Meteo.parameters;
-    const {daily: ret} = await this.getData({
+    const { daily: ret } = await this.getData({
       daily: [
         daily.sunset,
         daily.sunrise,
@@ -145,20 +148,20 @@ export default class Meteo {
   }
 
   async getHourly() {
-    const { hourly} = Meteo.parameters;
+    const { hourly } = Meteo.parameters;
     const { hourly: ret } = await this.getData({
       hourly: [
         hourly.temperature,
         hourly.weathercode,
         hourly.apparent_temperature,
         hourly.precipitation_probability,
+        hourly.relative_humidity,
       ],
     });
     return ret;
   }
 
-  async getAll(){
-
+  async getAll() {
     const { hourly, daily } = Meteo.parameters;
 
     return await this.getData({
@@ -177,5 +180,24 @@ export default class Meteo {
       ],
       now: true,
     });
+  }
+
+  async getLocationInfo(): Promise<types.location>{
+    let data:any = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${this.#lat}&longitude=${this.#lon}`
+    );
+
+    data = await data.json();
+
+    console.log(data)
+
+    return {
+      city: data.locality,
+      countryName: data.countryName,
+      region: data.principalSubdivision
+    }
+
+
+  
   }
 }
