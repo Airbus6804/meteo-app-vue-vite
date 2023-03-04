@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { getVNodeBlockHelper } from "@vue/compiler-core";
 
+import { ref } from "vue";
+
 library.add(faLocationDot);
 
 const meteo = new Meteo(
@@ -18,7 +20,7 @@ const meteo = new Meteo(
 
 const position = await meteo.getLocationInfo();
 
-const month = [
+const months = [
   "January",
   "February",
   "March",
@@ -33,7 +35,25 @@ const month = [
   "December",
 ];
 
-const date = new Date();
+let date = new Date();
+
+const month = ref(date.getMonth() - 1);
+const day = ref(date.getDate())
+const hour = ref(date.getHours())
+const minutes = ref(date.getMinutes());
+const seconds = ref(date.getSeconds());
+
+console.log("month: ", month.valueOf())
+
+setInterval(() => {
+    date = new Date();
+    month.value = date.getMonth() - 1;
+    day.value = date.getDate();
+    hour.value = date.getHours();
+    minutes.value = date.getMinutes();
+    seconds.value = date.getSeconds();
+}, 1000)
+
 </script>
 
 <template>
@@ -43,11 +63,11 @@ const date = new Date();
     </div>
     <span class="position"> {{ position.city }}, {{ position.region }} </span>
     <span class="time">
-      Today, {{ month[date.getMonth() - 1] }} {{ date.getDate() }}
-      {{ date.getHours() > 12 ? date.getHours() - 12 : date.getHours() }}:{{
-        date.getMinutes()
-      }}
-      {{ date.getHours() > 12 ? "PM" : "AM" }}
+      Today, {{ months[month.valueOf()] }} {{ day.valueOf() }}
+      {{ hour.valueOf() > 12 ? hour.valueOf() - 12 : hour.valueOf() }}:{{
+        Number(minutes.valueOf()) > 10 ? "" : "0"
+      }}{{ minutes.valueOf() }}
+      {{ hour.valueOf() > 12 ? "PM" : "AM" }}
     </span>
   </section>
 </template>
@@ -58,9 +78,9 @@ const date = new Date();
   text-shadow: 0px 4px 4px black;
   display: grid;
   grid-template-columns: 1.3rem 1fr;
-  grid-template-areas: 
-  "marker position" 
-  "marker time";
+  grid-template-areas:
+    "marker position"
+    "marker time";
 
   & > .position {
     font-size: 24px;
@@ -74,9 +94,9 @@ const date = new Date();
     height: 20px !important;
     display: flex;
     align-items: center;
-    &>*{
-        margin: auto;
-        margin-top: 10px;
+    & > * {
+      margin: auto;
+      margin-top: 10px;
     }
   }
 
