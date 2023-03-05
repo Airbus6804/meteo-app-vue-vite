@@ -1,25 +1,25 @@
 export interface meteoInformations {
-  temperature: Number;
-  weathercode: Number;
+  temperature: number;
+  weathercode: number;
   time: String;
 };
 
 export interface meteoInformationsHourly {
   time: Array<String>;
-  temperature: Array<Number>;
-  apparent_temperature: Array<Number>;
-  weather_code: Array<Number>;
-  precipitation_probability: Array<Number>;
-  relative_humidity: Array<Number>
+  temperature: Array<number>;
+  apparent_temperature: Array<number>;
+  weather_code: Array<number>;
+  precipitation_probability: Array<number>;
+  relative_humidity: Array<number>
 };
 
 export interface meteoInformationsDaily {
   time: Array<String>;
-  weather_code: Array<Number>;
-  sunset: Array<Number>;
-  sunrise: Array<Number>;
-  max_temperature: Array<Number>;
-  min_temperature: Array<Number>;
+  weather_code: Array<number>;
+  sunset: Array<number>;
+  sunrise: Array<number>;
+  max_temperature: Array<number>;
+  min_temperature: Array<number>;
 };
 
 export interface meteoInformationsArray {

@@ -33,9 +33,9 @@ const days = [
 ];
 
 const data = props.data as types.meteoInformationsDaily;
-const index = (props.index - 1) as Number;
+const index = (props.index - 1) as number;
 
-const date = new Date(data.time[index]);
+const date = new Date(data.time[index] as string);
 const day = index != 0 ? days[date.getDay()] : "Today";
 
 const { name, icon } = iconsMap.get(data.weather_code[index].toString());

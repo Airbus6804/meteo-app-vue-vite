@@ -24,7 +24,7 @@ icons https://erikflowers.github.io/weather-icons/
 
 const meteoData = await meteo.getDaily();
 
-const state = ref(0);
+const state = ref(-1);
 
 
 //const meteoData = JSON.parse(

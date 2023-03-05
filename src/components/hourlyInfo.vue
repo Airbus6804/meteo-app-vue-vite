@@ -5,6 +5,8 @@ import { icon, library } from "@fortawesome/fontawesome-svg-core";
 
 import iconsMap from "./scripts/iconsMap";
 
+import {ref, defineEmits} from "vue";
+
 /* import font awesome icon component */
 
 import { faArrowLeft, faTruckMonster } from "@fortawesome/free-solid-svg-icons";
@@ -25,7 +27,9 @@ const meteo = new Meteo(
   Number(localStorage.getItem("longitude"))
 );
 
-const emits = defineEmits();
+const emits:any = defineEmits();
+
+//const emits = console.log;
 
 const meteoData = await meteo.getHourly();
 
