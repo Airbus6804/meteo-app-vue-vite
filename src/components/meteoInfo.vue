@@ -18,6 +18,10 @@ const props = defineProps({
   index: {type: Number, required:true}
 });
 
+const emit = defineEmits()
+
+//
+
 const days = [
   "Sunday",
   "Monday",
@@ -37,10 +41,12 @@ const day = index != 0 ? days[date.getDay()] : "Today";
 const { name, icon } = iconsMap.get(data.weather_code[index].toString());
 
 const fa = "fa-solid fa-";
+
+console.log("this: ", this)
 </script>
 
 <template>
-  <div class="meteoInfo">
+  <div class="meteoInfo" @click="() => {$emit('changeState', index);}">
     <div class="meteoInfo__day">
       <span class="day"> {{ day }} </span>
       <span class="weather"> {{ name }} </span>
@@ -59,12 +65,23 @@ const fa = "fa-solid fa-";
   </div>
 </template>
 
+<style lang="scss">
+
+
+
+</style>
+
 <style scoped lang="scss">
+
+@mixin hoverEffect(){
+
+  
+}
 .meteoInfo {
-  transition: all .35s ease;
+  transition: all 0.35s ease;
   cursor: pointer;
   border-bottom: 1px solid gray;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   height: 3rem;
   display: flex;
   align-items: center;
@@ -112,14 +129,14 @@ const fa = "fa-solid fa-";
       }
     }
   }
+  
 
-  &:hover{
+  &:hover {
     background-color: rgba(255, 255, 255, 0.3);
-    
+
     border: 1px solid black;
     box-shadow: 0px 2px 3px #333;
-
-    &>.meteoInfo__day>.day{
+    & > .meteoInfo__day > .day {
       text-decoration: underline 1px #333;
     }
   }

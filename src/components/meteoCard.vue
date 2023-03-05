@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import Meteo from "./scripts/getData";
 import meteoInfo from "./meteoInfo.vue";
+import hourlyInfo from "./hourlyInfo.vue";
 
 import {ref} from "vue";
+import { meteoInformations, meteoInformationsDaily } from "./scripts/dataTypes";
 
 const lat = ref("wait!!");
 
@@ -22,6 +24,9 @@ icons https://erikflowers.github.io/weather-icons/
 
 const meteoData = await meteo.getDaily();
 
+const state = ref(0);
+
+
 //const meteoData = JSON.parse(
 //  '{"max_temperature":[29,28.9,29,28.8,28.7,28.7,28.8],"min_temperature":[28,27.8,27.6,27.9,27.6,28.2,27.9],"weather_code":[95,95,96,96,96,95,95],"time":["2023-03-04","2023-03-05","2023-03-06","2023-03-07","2023-03-08","2023-03-09","2023-03-10"],"sunrise":["2023-03-04T06:03","2023-03-05T06:03","2023-03-06T06:03","2023-03-07T06:03","2023-03-08T06:02","2023-03-09T06:02","2023-03-10T06:02"],"sunset":["2023-03-04T18:11","2023-03-05T18:11","2023-03-06T18:11","2023-03-07T18:11","2023-03-08T18:10","2023-03-09T18:10","2023-03-10T18:10"]}'
 //);
@@ -32,10 +37,15 @@ const meteoData = await meteo.getDaily();
 <template>
   <section class="meteoCard">
     <meteoInfo
+      v-if="state.valueOf() === -1"
       v-for="n in 7"
       v-bind:index="n"
-      v-bind:data="meteoData"
+      v-bind:data="meteoData as meteoInformationsDaily"
+      @changeState="(newState: number) => state = newState"
+      
     ></meteoInfo>
+    <hourlyInfo v-else="null" @changeState="(newState: number) => state = newState" :state="state"></hourlyInfo>
+    
   </section>
 </template>
 

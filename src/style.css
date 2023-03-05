@@ -11,11 +11,15 @@ a{
 body{
     background-color: #333;
     font-family: 'Inter', sans-serif;
+
+    overflow: hidden;
 }
 
 #bg{
     background-image: url("https://i.pinimg.com/originals/d6/9a/6b/d69a6be8268f1e2a8da35d6e0fc4a7ab.jpg");
-    background-position: center;
+    
+    /*background: url(https://rare-gallery.com/uploads/posts/343749-Sunset-Scenery-Minimalist-Minimalism-Digital-Art.jpg);
+    */background-position: 0% center;
     background-repeat: no-repeat;
     background-size: cover;
     height: 100vh;

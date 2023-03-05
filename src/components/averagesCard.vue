@@ -5,6 +5,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 
 /* import font awesome icon component */
 
+
 import {
   faUmbrella,
   faTemperature2,
