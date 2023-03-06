@@ -1,9 +1,25 @@
 <script setup lang="ts">
-import { faAppleAlt } from "@fortawesome/free-solid-svg-icons";
 import meteoCard from "./components/meteoCard.vue";
 import upper from "./components/upper.vue";
+import Meteo from "./components/scripts/getData";
 
+let latitude = 1, longitude = 1;
 
+function getLoc() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+
+      localStorage.setItem("latitude", latitude.toString());
+      localStorage.setItem("longitude", longitude.toString());
+    });
+  }
+}
+
+if (!localStorage.getItem("latitude")) {
+  getLoc();
+}
 
 
 

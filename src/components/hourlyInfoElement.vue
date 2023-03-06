@@ -41,7 +41,7 @@ const days = [
     <div class="icon">
         <FontAwesomeIcon :icon="icon"></FontAwesomeIcon>
     </div>
-    <span class="hour" :pm="hour > 12">{{ new Date(time).getHours() }}</span>
+    <span class="hour" :pm="hour > 12">{{ hour > 12 ? hour - 12 : hour }}</span>
   </div>
 </template>
 

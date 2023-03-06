@@ -3,6 +3,8 @@ import average from "./average.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 
+import { ref } from "vue";
+
 /* import font awesome icon component */
 
 
@@ -14,6 +16,7 @@ import {
 
 import Meteo from "./scripts/getData";
 import { meteoInformationsHourly } from "./scripts/dataTypes";
+
 
 library.add(faUmbrella, faTemperature2, faWater);
 
@@ -45,9 +48,9 @@ for(let i = 0; i < 24; i++){
     totRain += precipitation_probability[i];
 }
 
-const averageHumidity = totHumidity / 24;
-const averageTemperature = totTemperature / 24;
-const averageRain = totRain / 24;
+const averageHumidity = ref(totHumidity / 24);
+const averageTemperature = ref(totTemperature / 24);
+const averageRain = ref(totRain / 24);
 
 console.log(await meteo.getLocationInfo())
 
