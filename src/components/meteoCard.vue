@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Meteo from "./scripts/getData";
 import meteoInfo from "./meteoInfo.vue";
 import hourlyInfo from "./hourlyInfo.vue";
 
@@ -8,7 +7,7 @@ import { meteoInformations, meteoInformationsDaily } from "./scripts/dataTypes";
 
 const lat = ref("wait!!");
 
-const meteo = new Meteo(Number(localStorage.getItem("latitude")), Number(localStorage.getItem("longitude")));
+//const meteo = new Meteo(Number(localStorage.getItem("latitude")), Number(localStorage.getItem("longitude")));
 
 /*
 console.log(await meteo.getNow());
@@ -22,9 +21,23 @@ icons https://erikflowers.github.io/weather-icons/
 
 //console.log(await meteo.getNow()):
 
-const meteoData = await meteo.getDaily();
+//const meteoData = await meteo.getDaily();
+
+const props = defineProps({
+  hourly: {
+    type: Object as any,
+    required: true,
+  },
+  daily:{
+    type: Object as any,
+    required: true
+  }
+})
+
 
 const state = ref(-1);
+
+const emit = defineEmits();
 
 
 //const meteoData = JSON.parse(
@@ -40,11 +53,11 @@ const state = ref(-1);
       v-if="state.valueOf() === -1"
       v-for="n in 7"
       v-bind:index="n"
-      v-bind:data="meteoData as meteoInformationsDaily"
-      @changeState="(newState: number) => state = newState"
+      v-bind:data="daily as meteoInformationsDaily"
+      @changeState="(newState: number) => {state = newState; $emit('changeState', newState) }"
       
     ></meteoInfo>
-    <hourlyInfo v-else="null" @changeState="(newState: number) => state = newState" :state="state"></hourlyInfo>
+    <hourlyInfo v-else="null" @changeState="(newState: number) => {state = newState; $emit('changeState', newState) }" :state="state" :hourly="hourly"></hourlyInfo>
     
   </section>
 </template>

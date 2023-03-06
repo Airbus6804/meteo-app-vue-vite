@@ -13,25 +13,31 @@ import { faArrowLeft, faTruckMonster } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-import Meteo from "./scripts/getData";
+//import Meteo from "./scripts/getData";
 
 const props = defineProps({
   state: {
     type: Number,
     required: true,
   },
+  hourly: {
+    type: Object as any,
+    required: true,
+  },
 });
 
-const meteo = new Meteo(
+/*const meteo = new Meteo(
   Number(localStorage.getItem("latitude")),
   Number(localStorage.getItem("longitude"))
-);
+);*/
 
 const emits:any = defineEmits();
 
 //const emits = console.log;
 
-const meteoData = await meteo.getHourly();
+//const meteoData = await meteo.getHourly();
+
+const meteoData = props.hourly; 
 
 console.log(meteoData?.time);
 

@@ -170,6 +170,7 @@ export default class Meteo {
         hourly.weathercode,
         hourly.apparent_temperature,
         hourly.precipitation_probability,
+        hourly.relative_humidity,
       ],
       daily: [
         daily.sunset,
@@ -189,7 +190,6 @@ export default class Meteo {
 
     data = await data.json();
 
-    console.log(data)
 
     return {
       city: data.locality,

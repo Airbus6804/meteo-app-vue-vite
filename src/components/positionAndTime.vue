@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import Meteo from "./scripts/getData";
+
+import iconsMap from "./scripts/iconsMap";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 
@@ -7,18 +8,25 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { getVNodeBlockHelper } from "@vue/compiler-core";
 
 import { ref } from "vue";
+import { meteoInformations } from "./scripts/dataTypes";
+
+iconsMap.forEach((e) => library.add(e.icon));
 
 library.add(faLocationDot);
 
-const meteo = new Meteo(
+const props = defineProps({
+  current_weather: { type: Object as any, required: true },
+  position: { type: Object, required: true },
+})
+
+/*const meteo = new Meteo(
   Number(localStorage.getItem("latitude")),
   Number(localStorage.getItem("longitude"))
 );
 
-const position = await meteo.getLocationInfo();
+const position = await meteo.getLocationInfo();*/
 
 const months = [
   "January",
@@ -43,7 +51,8 @@ const hour = ref(date.getHours())
 const minutes = ref(date.getMinutes());
 const seconds = ref(date.getSeconds());
 
-console.log("month: ", month.valueOf())
+const CurrentWeather = props.current_weather as meteoInformations;
+
 
 setInterval(() => {
     date = new Date();
@@ -53,6 +62,10 @@ setInterval(() => {
     minutes.value = date.getMinutes();
     seconds.value = date.getSeconds();
 }, 1000)
+
+const fa = "fa-solid fa-";
+
+
 
 </script>
 
@@ -67,7 +80,7 @@ setInterval(() => {
       {{ hour.valueOf() > 12 ? hour.valueOf() - 12 : hour.valueOf() }}:{{
         Number(minutes.valueOf()) > 10 ? "" : "0"
       }}{{ minutes.valueOf() }}
-      {{ hour.valueOf() > 12 ? "PM" : "AM" }}
+      {{ hour.valueOf() > 12 ? "PM" : "AM" }}  <FontAwesomeIcon :icon="fa + iconsMap.get(CurrentWeather.weathercode.toString()).icon.iconName"></FontAwesomeIcon> {{ iconsMap.get(CurrentWeather.weathercode.toString()).name }}
     </span>
   </section>
 </template>
@@ -80,7 +93,8 @@ setInterval(() => {
   grid-template-columns: 1.3rem 1fr;
   grid-template-areas:
     "marker position"
-    "marker time";
+    "marker time"
+    ;
 
   & > .position {
     font-size: 24px;

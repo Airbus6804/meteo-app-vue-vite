@@ -14,11 +14,11 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 iconsMap.forEach((e) => library.add(e.icon));
 
 const props = defineProps({
-  data: {type: Object, required:true},
-  index: {type: Number, required:true}
+  data: { type: Object, required: true },
+  index: { type: Number, required: true },
 });
 
-const emit = defineEmits()
+const emit = defineEmits();
 
 //
 
@@ -41,22 +41,26 @@ const day = index != 0 ? days[date.getDay()] : "Today";
 const { name, icon } = iconsMap.get(data.weather_code[index].toString());
 
 const fa = "fa-solid fa-";
-
-console.log("this: ", this)
 </script>
 
 <template>
-  <div class="meteoInfo" @click="() => {$emit('changeState', index);}">
+  <div
+    class="meteoInfo"
+    @click="
+      () => {
+        $emit('changeState', index);
+      }
+    ">
     <div class="meteoInfo__day">
       <span class="day"> {{ day }} </span>
       <span class="weather"> {{ name }} </span>
     </div>
 
     <div class="meteoInfo__temperature">
-      <FontAwesomeIcon
-        :icon="fa + icon.iconName"
-        class="meteoInfo__temperature__icon"
-      ></FontAwesomeIcon>
+      <div class="meteoInfo__temperature__icon" :weather=name>
+        <FontAwesomeIcon :icon="fa + icon.iconName"></FontAwesomeIcon>
+      </div>
+
       <div class="meteoInfo__temperature__minMax">
         <span class="max"> {{ data.max_temperature[index] }} </span>
         <span class="min"> {{ data.min_temperature[index] }} </span>
@@ -65,17 +69,10 @@ console.log("this: ", this)
   </div>
 </template>
 
-<style lang="scss">
-
-
-
-</style>
+<style lang="scss"></style>
 
 <style scoped lang="scss">
-
-@mixin hoverEffect(){
-
-  
+@mixin hoverEffect() {
 }
 .meteoInfo {
   transition: all 0.35s ease;
@@ -85,6 +82,9 @@ console.log("this: ", this)
   height: 3rem;
   display: flex;
   align-items: center;
+  &:last-child{
+    border: none;
+  }
   &__day {
     display: flex;
     flex-direction: column;
@@ -106,10 +106,35 @@ console.log("this: ", this)
     display: flex;
     align-items: center;
     &__icon {
-      height: 20px;
+      position: relative;
+      & > span {
+        height: 20px;
+        width: 40px;
+        font-size: 40px !important;
+      }
 
-      width: 40px;
-      font-size: 40px !important;
+      &::after {
+          transition: .2s ease;
+          content: attr(weather);
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          transform: translate(-50%, -120%);
+
+          display: block;
+          font-size: 1rem;
+          background-color: #ffffff;
+          width: max-content;
+          font-size: 0.9rem;
+          padding: 2px;
+          border-radius: 5px;
+        }
+      &:hover {
+        &::after{
+          opacity: 1;
+        }
+      }
+      
 
       /*background-image: url("https://www.figma.com/file/lLym1mtLhaRZ7qDHnT48Xe/Weather-Glassmorphism-Icon-(Community)?node-id=102%3A1855&t=L0cHFvMbz1EX8Yqw-4");
         background-position: center;
@@ -129,7 +154,6 @@ console.log("this: ", this)
       }
     }
   }
-  
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.3);
