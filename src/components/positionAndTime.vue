@@ -53,6 +53,27 @@ const seconds = ref(date.getSeconds());
 
 const CurrentWeather = props.current_weather as meteoInformations;
 
+function getLoc(): Promise<Boolean> {
+  return new Promise<Boolean>((resolve, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          localStorage.setItem("latitude", position.coords.latitude.toString());
+          localStorage.setItem("longitude", position.coords.longitude.toString());
+          resolve(true);
+        },
+        (error) => {
+          reject(false);
+        }
+      );
+    }
+  });
+}
+
+function refreshPage(){
+  window.location.href= '/';
+}
+
 
 setInterval(() => {
     date = new Date();
@@ -67,11 +88,14 @@ const fa = "fa-solid fa-";
 
 
 
+
 </script>
 
 <template>
   <section class="positionAndTime">
-    <div class="icon">
+    <div class="icon" @click="() => getLoc().then(() => {
+      refreshPage();
+    })">
       <FontAwesomeIcon icon="fa-solid fa-location-dot"></FontAwesomeIcon>
     </div>
     <span class="position"> {{ position.city }}, {{ position.region }} </span>
@@ -104,6 +128,7 @@ const fa = "fa-solid fa-";
   }
 
   & > .icon {
+    cursor: pointer;
     grid-area: marker;
     height: 20px !important;
     display: flex;

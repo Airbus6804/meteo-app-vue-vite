@@ -80,7 +80,6 @@ watch(props, () => {
     }
   } else {
     for (let i = 24 * state.state; i < 24 * (state.state + 1); i++) {
-      console.log(i);
       totHumidity += relative_humidity[i];
       totTemperature += temperature[i];
       totRain += precipitation_probability[i];
@@ -114,9 +113,15 @@ watch(props, () => {
 
 <style scoped lang="scss">
 .averagesCard {
-  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 1rem;
   padding: 1rem;
   display: flex;
+}
+</style>
+
+<style>
+.averagesCard{
+  transition: background .5s ease;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 </style>

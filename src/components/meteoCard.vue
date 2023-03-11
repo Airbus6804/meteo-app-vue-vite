@@ -64,7 +64,17 @@ const emit = defineEmits();
 
 <style lang="scss" scoped>
 .meteoCard {
-  background-color: rgba(255, 255, 255, 0.3);
+  
   padding: 1rem;
+}
+</style>
+
+<style>
+
+
+
+.meteoCard{
+  transition: background .5s ease;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 </style>

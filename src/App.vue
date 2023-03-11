@@ -62,6 +62,18 @@ const position = ref(types.emptyLocation);
 
 position.value = await meteo.getLocationInfo();
 
+type Settings = {
+  averageOpacity: number | undefined;
+  meteoCardOpacity: number |undefined;
+  lightMode: boolean | undefined;
+}
+
+const settings = ref({
+  averageOpacity: 0.5,
+  meteoCardOpacity: 0.3,
+  lightMode: true,
+})
+
 //data.value = await meteo.getAll();
 
 const d = await meteo.getAll();
@@ -86,7 +98,14 @@ hourly.value = d.hourly;
           :position="position"
           :current_weather="current_weather"
           :hourly="hourly"
-          :state="state"></upper>
+          :state="state"
+          @changeSettings="(newSettings:Settings) => {
+            settings.averageOpacity = newSettings.averageOpacity ?? settings.averageOpacity
+            settings.meteoCardOpacity = newSettings.meteoCardOpacity ?? settings.meteoCardOpacity
+            settings.lightMode = newSettings.lightMode ?? settings.lightMode
+            log(newSettings);
+          }"
+        ></upper>
       </Suspense>
       <Suspense>
         <meteoCard

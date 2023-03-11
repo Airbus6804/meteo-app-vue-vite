@@ -2,6 +2,7 @@
 import { PropsExpression } from "@vue/compiler-core";
 import averagesCard from "./averagesCard.vue";
 import positionAndTime from "./positionAndTime.vue";
+import settings from "./settings.vue";
 import {
   location,
   meteoInformations,
@@ -15,6 +16,8 @@ const props = defineProps({
   position: { type: Object, required: true },
   state: { type: Number, required: true },
 });
+
+defineEmits(['changeSettings'])
 
 //const {state: State} = props;
 
@@ -33,18 +36,21 @@ const current_weather = props.current_weather as meteoInformations;
 
 <template>
   <section class="upper">
-    <Suspense>
-      <positionAndTime
-        class="positionAndTime"
-        :current_weather="current_weather"
-        :position="position"></positionAndTime>
-    </Suspense>
-    <Suspense>
-      <averagesCard
-        class="averagesCard"
-        :hourly="hourly"
-        :state=props></averagesCard>
-    </Suspense>
+    <positionAndTime
+      class="positionAndTime"
+      :current_weather="current_weather"
+      :position="position"></positionAndTime>
+    <averagesCard
+      class="averagesCard"
+      :hourly="hourly"
+      :state="props"></averagesCard>
+
+    <settings @changeSettings="(newSettings) => {
+      $emit('changeSettings', newSettings);
+    }"></settings>
+
+
+    
   </section>
 </template>
 

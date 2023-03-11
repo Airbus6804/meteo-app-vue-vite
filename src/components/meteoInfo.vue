@@ -123,7 +123,7 @@ const fa = "fa-solid fa-";
 
           display: block;
           font-size: 1rem;
-          background-color: #ffffff;
+          
           width: max-content;
           font-size: 0.9rem;
           padding: 2px;
@@ -164,5 +164,12 @@ const fa = "fa-solid fa-";
       text-decoration: underline 1px #333;
     }
   }
+}
+</style>
+
+<style lang="scss">
+.meteoInfo__temperature__icon::after{
+  background-color: #ffffff;
+  color: black;
 }
 </style>

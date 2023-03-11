@@ -16,10 +16,10 @@ body{
 }
 
 #bg{
-    background-image: url("https://i.pinimg.com/originals/d6/9a/6b/d69a6be8268f1e2a8da35d6e0fc4a7ab.jpg");
+    
     
     /*background: url(https://rare-gallery.com/uploads/posts/343749-Sunset-Scenery-Minimalist-Minimalism-Digital-Art.jpg);
-    */background-position: 0% center;
+    */background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     height: 100vh;
