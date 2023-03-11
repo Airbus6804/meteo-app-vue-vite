@@ -58,6 +58,7 @@ const backgroundsArray: Array<bg> = [
 ];
 
 const backgrounds = new Set(backgroundsArray);
+const settings = JSON.parse(localStorage.getItem("meteoSettings") ?? "{}")
 
 function uncheckAll() {
   backgrounds.forEach((el) => {
@@ -66,16 +67,28 @@ function uncheckAll() {
 }
 
 function changeBackground(b: bg) {
+  settings.background = b;
+  settings.background.url = new URL(b.url);
   const bgEl: any = document.getElementById("bg");
   bgEl.style.backgroundImage = `url(${b.url.href})`;
+  
+  localStorage.setItem("meteoSettings", JSON.stringify(settings))
 }
 
-changeBackground(backgroundsArray[0]);
+changeBackground(settings.background ?? backgroundsArray[0]);
 
-let lightMode = true;
+console.log(settings.background, backgroundsArray[0])
+
+
+console.log(settings)
+
+let lightMode = settings.lightMode ?? true;
 const lightModeRef = ref(lightMode);
-const openedMenu = ref(true);
-let meteoCardOpacity = 0.35;
+const openedMenu = ref(false);
+let meteoCardOpacity = settings.opacity ?? 0.35;
+
+bgColor.value = lightMode ? "light" : "dark";
+
 
 
 const elements: Array<any> = [];
@@ -90,6 +103,12 @@ let settingsMenu:any = {style: ""};
 
 
 function updateValues() {
+
+  settings.lightMode = lightMode;
+  settings.opacity = meteoCardOpacity;
+
+  localStorage.setItem("meteoSettings", JSON.stringify(settings))
+
   elements.forEach((el: any) => {
     el.style.backgroundColor = `rgba(${
       lightMode ? "255, 255, 255" : "30, 30, 30"
@@ -102,15 +121,20 @@ function updateValues() {
 }
 
 onMounted(() => {
+
   elements.push(
     document.querySelector(".averagesCard"),
     document.querySelector(".meteoCard")
   );
 
-  console.log(document.querySelector(".meteoInfo__temperature__icon"));
+  
   settingsMenu = document.querySelector(".settingsMenu");
+  updateValues();
 });
+
 </script>
+
+
 
 <script lang="ts"></script>
 
@@ -153,6 +177,7 @@ onMounted(() => {
         <div class="settingsMenu__theme__sliders__header">Opacity</div>
         <div class="settingsMenu__theme__sliders__slider">
           <input
+            :value="meteoCardOpacity * 100"
             type="range"
             v-on:input="(e:any) =>{ 
             //$emit('changeSettings', {averageOpacity: parseInt(e.target.value)})
