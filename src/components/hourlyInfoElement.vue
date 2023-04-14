@@ -72,6 +72,8 @@ const days = [
   }
 
   &>.temperature{
+    position: relative;
+    top: 1rem;
     &::after{
         content: "°";
     }
@@ -96,6 +98,8 @@ const days = [
     &::after{
         content: " am";
     }
+    position: relative;
+    bottom: 1rem;
   }
 
   &>*{

@@ -132,6 +132,8 @@ onMounted(() => {
   updateValues();
 });
 
+
+//:style="openedMenu ? '' : 'transform: translateX(100%)'"
 </script>
 
 
@@ -242,7 +244,7 @@ onMounted(() => {
 
   &__close {
     position: absolute;
-    left: 1.5rem;
+    left: 5%;
     top: 1rem;
     cursor: pointer;
   }
@@ -286,7 +288,7 @@ onMounted(() => {
 
     &__selection {
       margin-top: 1rem;
-
+      
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       column-gap: 2rem;
@@ -333,3 +335,5 @@ onMounted(() => {
   }
 }
 </style>
+
+
