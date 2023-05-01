@@ -147,7 +147,7 @@ console.log(day + props.state > 6 ? day + props.state - 6 : day + props.state);
         height: 50%;
         margin: auto;
         width: 100vw;
-        overflow-x: scroll;
+        overflow-x: auto;
     }
   }
 
